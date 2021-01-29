@@ -3,7 +3,7 @@ import { getSlots, makeMergeProps } from '@fluentui/react-utils';
 import * as React from 'react';
 
 import { ThemeContext, ProviderContextValue, useFluent } from './context';
-import { PartialTheme } from './tempTheme';
+import { PartialTheme } from '@fluentui/react-theme';
 import { ThemeProviderState, useThemeProviderState } from './ThemeProvider';
 
 export interface ProviderProps extends Partial<ProviderContextValue> {
@@ -58,7 +58,7 @@ export function useProvider(props: ProviderProps, ref: React.Ref<HTMLElement>) {
 }
 
 /**
- * TODO
+ * A React provider that allows to define theme, text direction and context for rendering for children components.
  */
 export const Provider: React.FunctionComponent<ProviderProps> = React.forwardRef<HTMLDivElement, ProviderProps>(
   (props: ProviderProps, ref: React.Ref<HTMLDivElement>) => {

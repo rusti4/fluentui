@@ -1,5 +1,5 @@
+import { Theme } from '@fluentui/react-theme';
 import * as React from 'react';
-import { Theme } from './tempTheme';
 
 export interface ProviderContextValue {
   /** Sets the direction of text & generated styles. */
@@ -20,7 +20,8 @@ export function useFluent(): ProviderContextValue {
   return React.useContext(ProviderContext);
 }
 
-export const ThemeContext = React.createContext<ThemeProviderValue>({});
+// TODO: should we use some theme as a default one?
+export const ThemeContext = React.createContext<ThemeProviderValue>(({} as unknown) as Theme);
 
 export function useTheme(): ThemeProviderValue {
   return React.useContext(ThemeContext);

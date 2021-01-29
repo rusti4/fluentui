@@ -1,7 +1,10 @@
+//
+// TODO: should be moved to `react-theme-provider`
+// https://github.com/microsoft/fluentui/pull/16698
+
 import { useMergedRefs } from '@fluentui/react-hooks';
+import { mergeThemes, themeToCSSVariables, PartialTheme, Theme } from '@fluentui/react-theme';
 import { getSlots, makeMergeProps } from '@fluentui/react-utils';
-import { PartialTheme, Theme } from './tempTheme';
-import { mergeThemes, themeToCSSVariables } from './tempThemeUtils';
 import * as React from 'react';
 
 import { ThemeContext, useTheme } from './context';
