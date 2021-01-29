@@ -58,7 +58,7 @@ export function useProvider(props: ProviderProps, ref: React.Ref<HTMLElement>) {
 }
 
 /**
- * TODO
+ * A React provider that allows to define theme, text direction and context for rendering for children components.
  */
 export const Provider: React.FunctionComponent<ProviderProps> = React.forwardRef<HTMLDivElement, ProviderProps>(
   (props: ProviderProps, ref: React.Ref<HTMLDivElement>) => {
