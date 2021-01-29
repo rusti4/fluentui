@@ -5,30 +5,28 @@ import {
   MakeStylesOptions,
   MakeStylesRenderer,
 } from '@fluentui/make-styles';
-import { useTheme } from '@fluentui/react-theme-provider';
-import { useDocument } from '@fluentui/react-window-provider';
-import { Tokens } from '@fluentui/theme';
+import { useFluent, useTheme } from '@fluentui/react-provider';
+import { Theme } from '@fluentui/react-theme';
 import * as React from 'react';
 
-function useRenderer(): MakeStylesRenderer {
-  const target = useDocument();
-
+function useRenderer(document: Document | undefined): MakeStylesRenderer {
   return React.useMemo(() => {
-    return createDOMRenderer(target);
-  }, [target]);
+    return createDOMRenderer(document);
+  }, [document]);
 }
 
-export function makeStyles<Selectors>(definitions: MakeStylesDefinition<Selectors, Tokens>[]) {
+export function makeStyles<Selectors>(definitions: MakeStylesDefinition<Selectors, Theme>[]) {
   const getStyles = vanillaMakeStyles(definitions);
 
   return function useClasses(selectors: Selectors) {
-    const { tokens, rtl } = useTheme();
-    const renderer = useRenderer();
+    const { dir, document } = useFluent();
+    const theme = useTheme();
 
-    const options: MakeStylesOptions<Tokens> = {
-      tokens: tokens as Tokens,
+    const renderer = useRenderer(document);
+    const options: MakeStylesOptions<Theme> = {
+      tokens: theme as Theme,
       renderer,
-      rtl,
+      rtl: dir === 'rtl',
     };
 
     return getStyles(selectors, options);

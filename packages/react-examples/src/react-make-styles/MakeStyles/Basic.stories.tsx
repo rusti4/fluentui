@@ -1,26 +1,26 @@
 import { ax, makeStyles } from '@fluentui/react-make-styles';
-import { ThemeProvider } from '@fluentui/react-theme-provider';
-import { WindowProvider } from '@fluentui/react-window-provider';
+import { Provider } from '@fluentui/react-provider';
+import { webLightTheme } from '@fluentui/react-theme';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
 const useBasicStyles = makeStyles<{ primary?: boolean }>([
   [
     null,
-    tokens => ({
-      background: tokens.color.body.background,
-      color: tokens.color.body.contentColor,
-      border: `5px solid ${tokens.color.body.borderColor}`,
+    theme => ({
+      border: `5px solid ${theme.neutralColorTokens.neutralStroke1}`,
+      backgroundColor: theme.neutralColorTokens.neutralBackground1,
+      color: theme.neutralColorTokens.neutralForeground1,
 
+      margin: '5px',
       padding: '5px',
     }),
   ],
   [
     s => s.primary,
-    tokens => ({
-      background: tokens.color.brand.background,
-      color: tokens.color.brand.contentColor,
-      borderColor: tokens.color.brand.borderColor,
+    theme => ({
+      borderColor: theme.neutralColorTokens.brandForeground,
+      color: theme.neutralColorTokens.brandForeground,
     }),
   ],
 ]);
@@ -29,7 +29,6 @@ const useOverrideStyles = makeStyles<{}>([
   [
     null,
     () => ({
-      background: 'transparent',
       color: 'red',
       borderColor: 'red',
     }),
@@ -53,7 +52,7 @@ const ContainerWithOverrides: React.FC = props => {
 };
 
 const PortalFrame: React.FunctionComponent<{
-  children: (externalDocument: Window) => React.ReactElement;
+  children: (externalDocument: Document) => React.ReactElement;
 }> = ({ children }) => {
   const [frameRef, setFrameRef] = React.useState<HTMLIFrameElement | null>(null);
 
@@ -66,7 +65,7 @@ const PortalFrame: React.FunctionComponent<{
       />
       {frameRef &&
         ReactDOM.createPortal(
-          children(frameRef.contentDocument?.defaultView as Window),
+          children(frameRef.contentDocument as Document),
           (frameRef.contentDocument as Document).body,
         )}
     </>
@@ -74,27 +73,25 @@ const PortalFrame: React.FunctionComponent<{
 };
 
 export const Basic = () => (
-  <ThemeProvider>
+  <Provider theme={webLightTheme}>
     <Container>Hello world!</Container>
     <Container primary>Hello world!</Container>
-  </ThemeProvider>
+  </Provider>
 );
 
 export const Overrides = () => (
-  <ThemeProvider>
+  <Provider>
     <ContainerWithOverrides>Hello world!</ContainerWithOverrides>
-  </ThemeProvider>
+  </Provider>
 );
 
 export const Frame = () => (
   <PortalFrame>
     {externalDocument => (
-      <WindowProvider window={externalDocument}>
-        <ThemeProvider>
-          <Container>Hello world!</Container>
-          <Container primary>Hello world!</Container>
-        </ThemeProvider>
-      </WindowProvider>
+      <Provider document={externalDocument} theme={webLightTheme}>
+        <Container>Hello world!</Container>
+        <Container primary>Hello world!</Container>
+      </Provider>
     )}
   </PortalFrame>
 );

@@ -2,7 +2,7 @@ import { useMergedRefs } from '@fluentui/react-hooks';
 import { getSlots, makeMergeProps } from '@fluentui/react-utils';
 import * as React from 'react';
 
-import { ThemeContext, ProviderContextValue, useFluent } from './context';
+import { ThemeContext, ProviderContext, ProviderContextValue, useFluent } from './context';
 import { PartialTheme } from '@fluentui/react-theme';
 import { ThemeProviderState, useThemeProviderState } from './ThemeProvider';
 
@@ -25,12 +25,16 @@ export function useProviderState(draftState: ProviderState) {
 
 export function renderProvider(state: ProviderState) {
   const { slots, slotProps } = getSlots(state);
-  const { theme } = state;
+  const { dir, document, theme } = state;
+
+  const value = React.useMemo(() => ({ dir, document }), [dir, document]);
 
   return (
-    <ThemeContext.Provider value={theme}>
-      <slots.root {...slotProps.root} />
-    </ThemeContext.Provider>
+    <ProviderContext.Provider value={value}>
+      <ThemeContext.Provider value={theme}>
+        <slots.root {...slotProps.root} />
+      </ThemeContext.Provider>
+    </ProviderContext.Provider>
   );
 }
 
